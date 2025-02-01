@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeClean - Available Housekeepers</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-home"></i>
+            HomeClean
+        </div>
+        <div class="nav-items">
+            <a href="../housekeeping.html">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <div class="maids-section">
+        <div class="header-section">
+            <h2>Our Professional Housekeepers</h2>
+            <div class="horizontal-nav">
+                <ul>
+                    <li><button class="filter-btn active" data-filter="all">All Services</button></li>
+                    <li><button class="filter-btn" data-filter="cleaning">Cleaning Only</button></li>
+                    <li><button class="filter-btn" data-filter="cooking">Cooking Only</button></li>
+                    <li><button class="filter-btn" data-filter="both">Cleaning & Cooking</button></li>
+                </ul>
+            </div>
+            <div class="online-status">
+                <span class="status-dot"></span>
+                <span>10 Housekeepers Available</span>
+            </div>
+        </div>
+        
+        <div class="maid-profiles-container">
+            <!-- Maid profiles will be loaded here -->
+        </div>
+    </div>
+
+    <div class="home-button">
+        <a href="../housekeeping.html">Back to Services</a>
+    </div>
+
+    <!-- Add chat widget container -->
+    <div id="vfchat"></div>
+
+    <!-- Modal for booking -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-details"></div>
+            <div class="booking-form">
+                <h3>Book Service</h3>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label>Select Date:</label>
+                        <input type="date" name="booking_date" required min="">
+                    </div>
+                    <div class="form-group">
+                        <label>Select Time:</label>
+                        <select name="booking_time" required>
+                            <option value="">Choose time slot</option>
+                            <option value="morning">Morning (6 AM - 10 AM)</option>
+                            <option value="afternoon">Afternoon (10 AM - 2 PM)</option>
+                            <option value="evening">Evening (2 PM - 6 PM)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="book-btn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Maid profiles data
+    const maids = [
+        {
+            id: 1,
+            name: "Priya Sharma",
+            gender: "Female",
+            age: 28,
+            experience: "4 years",
+            rating: 4.8,
+            services: ["Cleaning", "Cooking"],
+            availability: "Full-time"
+        },
+        {
+            id: 2,
+            name: "Lakshmi Patel",
+            gender: "Female",
+            age: 32,
+            experience: "7 years",
+            rating: 4.9,
+            services: ["Cleaning"],
+            availability: "Part-time"
+        },
+        {
+            id: 3,
+            name: "Anjali Verma",
+            gender: "Female",
+            age: 25,
+            experience: "3 years",
+            rating: 4.7,
+            services: ["Cooking"],
+            availability: "Full-time"
+        },
+        // Add more maid profiles as needed
+    ];
+
+    // Function to create star rating HTML
+    function createStarRating(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 !== 0;
+        let starsHtml = '';
+        
+        for (let i = 0; i < fullStars; i++) {
+            starsHtml += '<i class="fas fa-star"></i>';
+        }
+        if (hasHalfStar) {
+            starsHtml += '<i class="fas fa-star-half-alt"></i>';
+        }
+        const emptyStars = 5 - Math.ceil(rating);
+        for (let i = 0; i < emptyStars; i++) {
+            starsHtml += '<i class="far fa-star"></i>';
+        }
+        
+        return starsHtml;
+    }
+
+    // Function to display maid profiles
+    function displayMaidProfiles(filter = 'all') {
+        const container = document.querySelector('.maid-profiles-container');
+        
+        // Filter maids based on selected service
+        const filteredMaids = maids.filter(maid => {
+            if (filter === 'all') return true;
+            if (filter === 'cleaning') return maid.services.includes('Cleaning') && !maid.services.includes('Cooking');
+            if (filter === 'cooking') return maid.services.includes('Cooking') && !maid.services.includes('Cleaning');
+            if (filter === 'both') return maid.services.includes('Cleaning') && maid.services.includes('Cooking');
+            return true;
+        });
+
+        // Clear existing profiles
+        container.innerHTML = '';
+
+        // Add filtered profiles
+        filteredMaids.forEach(maid => {
+            const profileHtml = `
+                <div class="maid-profile">
+                    <div class="profile-content">
+                        <h2>${maid.name}</h2>
+                        <p><i class="fas fa-venus-mars"></i> ${maid.gender}</p>
+                        <p><i class="fas fa-user"></i> Age: ${maid.age}</p>
+                        <p><i class="fas fa-briefcase"></i> Experience: ${maid.experience}</p>
+                        <p><i class="fas fa-concierge-bell"></i> Services: ${maid.services.join(' & ')}</p>
+                        <div class="rating">
+                            ${createStarRating(maid.rating)}
+                            <span>(${maid.rating})</span>
+                        </div>
+                        <button onclick="showMaidDetails(${maid.id})" class="view-btn">View Details</button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += profileHtml;
+        });
+    }
+
+    // Function to show maid details in modal
+    function showMaidDetails(maidId) {
+        const maid = maids.find(m => m.id === maidId);
+        const modalDetails = document.getElementById('modal-details');
+        
+        modalDetails.innerHTML = `
+            <h2>Book ${maid.name}</h2>
+            <div class="modal-info">
+                <div class="housekeeper-details">
+                    <p><i class="fas fa-venus-mars"></i> Gender: ${maid.gender}</p>
+                    <p><i class="fas fa-user"></i> Age: ${maid.age} years</p>
+                    <p><i class="fas fa-briefcase"></i> Experience: ${maid.experience}</p>
+                    <p><i class="fas fa-concierge-bell"></i> Services: ${maid.services.join(' & ')}</p>
+                    <div class="rating">
+                        ${createStarRating(maid.rating)}
+                        <span>(${maid.rating})</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get stored preferences
+        const preferences = JSON.parse(sessionStorage.getItem('housekeeping_preferences') || '{}');
+        
+        // Use preferences to filter maids if needed
+        if (preferences.serviceType) {
+            const filterMap = {
+                'cooking': 'cooking',
+                'cleaning': 'cleaning',
+                'combined': 'both'
+            };
+            
+            // Find and click the appropriate filter button
+            const filterBtn = document.querySelector(`.filter-btn[data-filter="${filterMap[preferences.serviceType]}"]`);
+            if (filterBtn) {
+                filterBtn.click();
+            }
+        }
+        
+        // Clear stored preferences
+        sessionStorage.removeItem('housekeeping_preferences');
+        
+        // Display initial profiles
+        displayMaidProfiles();
+
+        // Initialize filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                // Display filtered profiles
+                displayMaidProfiles(this.dataset.filter);
+            });
+        });
+
+        // Set minimum date for booking to today
+        const dateInput = document.querySelector('input[name="booking_date"]');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+        }
+
+        // Close modal when clicking the close button or outside the modal
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal || event.target.className === 'close') {
+                modal.style.display = 'none';
+            }
+        }
+    });
+    </script>
+
+    <!-- Add Voiceflow chat widget script -->
+    <script>
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+                window.voiceflow.chat.load({
+                    verify: { projectID: '679c8a7c89ce96171d913bb4' },
+                    url: 'https://general-runtime.voiceflow.com',
+                    versionID: 'production'
+                });
+            }
+            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+            v.type = "text/javascript";
+            s.parentNode.insertBefore(v, s);
+        })(document, 'script');
+    </script>
+</body>
+</html> 

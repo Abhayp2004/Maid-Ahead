@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housekeeping Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background-color: #4a90e2;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .service-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, #ffffff 0%, #f5f7fa 100%);
+            border: 1px solid rgba(74, 144, 226, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-header img {
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover .service-header img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .service-card.active .service-header img {
+            animation: pulse 2s infinite;
+        }
+
+        .service-header {
+            text-align: center;
+            padding: 20px;
+            background-color: #4a90e2;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .book-now {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .book-now:hover {
+            background-color: #357abd;
+        }
+
+        .service-card.active {
+            grid-column: 1 / -1;
+            display: flex;
+            max-width: 100%;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .service-card.active .service-header {
+            flex: 0 0 300px;
+            border-right: 1px solid #eee;
+            padding-right: 20px;
+        }
+
+        .service-form {
+            text-align: left;
+            padding: 15px;
+            display: none;
+            width: 100%;
+        }
+
+        .service-card.active .service-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-group {
+            flex: 1 1 200px;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .total-charge {
+            flex: 1 1 100%;
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4a90e2;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .progress-bar {
+            display: flex;
+            margin-bottom: 30px;
+            width: 100%;
+            justify-content: space-between;
+            position: relative;
+            flex: 1 1 100%;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding-top: 25px;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #4a90e2;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 9px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #4a90e2;
+            z-index: 1;
+        }
+
+        .progress-step:first-child::after {
+            left: 50%;
+            width: 50%;
+        }
+
+        .progress-step:last-child::after {
+            width: 50%;
+        }
+
+        .book-now-container {
+            flex: 1 1 100%;
+            text-align: right;
+        }
+
+        .service-card {
+            min-height: 500px;
+        }
+
+        .other-services {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex: 1 1 100%;
+        }
+
+        .mini-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            background: linear-gradient(145deg, #ffffff 0%, #f5f7fa 100%);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .mini-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: #f8f9fa;
+        }
+
+        .mini-card.active {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .mini-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            color: inherit;
+        }
+
+        .service-section {
+            flex: 1 1 100%;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .section-title {
+            color: #4a90e2;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .charge-breakdown {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: right;
+        }
+
+        .progress-step.active::before {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .progress-step.active::after {
+            background: #4CAF50;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wobble {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-3deg); }
+            50% { transform: translateX(5px) rotate(3deg); }
+            75% { transform: translateX(-2px) rotate(-1deg); }
+            100% { transform: translateX(0); }
+        }
+
+        .service-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .service-card.active {
+            animation: slideIn 0.5s ease;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .service-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .service-option svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .service-option.cooking {
+            background: linear-gradient(145deg, #fff5f5, #fff0f0);
+        }
+
+        .service-option.cleaning {
+            background: linear-gradient(145deg, #f0f7ff, #e6f3ff);
+        }
+
+        .service-option.combined {
+            background: linear-gradient(145deg, #f3e5f5, #ede7f6);
+        }
+
+        .service-option:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-option.active {
+            border-color: #4a90e2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-option h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .service-details {
+            flex: 1;
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .service-details .service-header,
+        .service-details .other-services {
+            display: none; /* Hide the service header and mini-cards */
+        }
+
+        .service-details .service-form {
+            display: block; /* Always show the form */
+            width: 100%;
+        }
+
+        .service-details .service-card {
+            box-shadow: none;
+            padding: 0;
+            background: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .services {
+            display: none; /* Hide the original services grid */
+        }
+    </style>
+    <script src="sample1.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Professional Housekeeping Services</h1>
+        <p>Choose the service that best fits your needs</p>
+    </header>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="service-option cooking active" onclick="showService('cooking-card')">
+                <svg width="40" height="40" viewBox="0 0 100 100">
+                    <!-- Background circle with gradient -->
+                    <defs>
+                        <linearGradient id="cookingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF9966"/>
+                            <stop offset="100%" style="stop-color:#FF5E62"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#cookingGradient)" opacity="0.2"/>
+                    
+                    <!-- Cooking pot design -->
+                    <path d="M25 45 C25 35, 75 35, 75 45 S70 70 50 70 S25 55 25 45" 
+                          fill="url(#cookingGradient)" 
+                          stroke="#FF5E62" 
+                          stroke-width="2"/>
+                    
+                    <!-- Steam effects -->
+                    <path d="M40 30 Q45 25 40 20" stroke="#FF5E62" stroke-width="2" stroke-linecap="round">
+                        <animate attributeName="d" 
+                                 dur="2s" 
+                                 values="M40 30 Q45 25 40 20;M40 30 Q35 25 40 20;M40 30 Q45 25 40 20" 
+                                 repeatCount="indefinite"/>
+                    </path>
+                    <path d="M50 25 Q55 20 50 15" stroke="#FF5E62" stroke-width="2" stroke-linecap="round">
+                        <animate attributeName="d" 
+                                 dur="2s" 
+                                 values="M50 25 Q55 20 50 15;M50 25 Q45 20 50 15;M50 25 Q55 20 50 15" 
+                                 repeatCount="indefinite" 
+                                 begin="0.3s"/>
+                    </path>
+                    <path d="M60 30 Q65 25 60 20" stroke="#FF5E62" stroke-width="2" stroke-linecap="round">
+                        <animate attributeName="d" 
+                                 dur="2s" 
+                                 values="M60 30 Q65 25 60 20;M60 30 Q55 25 60 20;M60 30 Q65 25 60 20" 
+                                 repeatCount="indefinite" 
+                                 begin="0.6s"/>
+                    </path>
+                </svg>
+                <h3>Cooking Service</h3>
+            </div>
+            
+            <div class="service-option cleaning" onclick="showService('cleaning-card')">
+                <svg width="40" height="40" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="cleaningGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00E1FF"/>
+                            <stop offset="100%" style="stop-color:#00B4D8"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#cleaningGradient)" opacity="0.2"/>
+                    
+                    <!-- Sparkle design -->
+                    <g transform="translate(50,50)">
+                        <g>
+                            <animate attributeName="transform" 
+                                     attributeType="XML" 
+                                     type="rotate" 
+                                     from="0" 
+                                     to="360" 
+                                     dur="8s" 
+                                     repeatCount="indefinite"/>
+                            <path d="M-25,-25 L25,25 M25,-25 L-25,25" 
+                                  stroke="url(#cleaningGradient)" 
+                                  stroke-width="6" 
+                                  stroke-linecap="round"/>
+                            <circle cx="0" cy="0" r="12" 
+                                    fill="url(#cleaningGradient)"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Small sparkles -->
+                    <circle cx="20" cy="20" r="3" fill="#00B4D8">
+                        <animate attributeName="opacity" 
+                                 values="0;1;0" 
+                                 dur="2s" 
+                                 repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="80" cy="80" r="3" fill="#00B4D8">
+                        <animate attributeName="opacity" 
+                                 values="0;1;0" 
+                                 dur="2s" 
+                                 repeatCount="indefinite" 
+                                 begin="0.5s"/>
+                    </circle>
+                </svg>
+                <h3>Cleaning Service</h3>
+            </div>
+            
+            <div class="service-option combined" onclick="showService('combined-card')">
+                <svg width="40" height="40" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="combinedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#9C27B0"/>
+                            <stop offset="100%" style="stop-color:#673AB7"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#combinedGradient)" opacity="0.2"/>
+                    
+                    <!-- Combined symbol -->
+                    <g transform="translate(50,50)">
+                        <g>
+                            <animate attributeName="transform" 
+                                     attributeType="XML" 
+                                     type="rotate" 
+                                     from="0" 
+                                     to="360" 
+                                     dur="12s" 
+                                     repeatCount="indefinite"/>
+                            <circle cx="0" cy="0" r="25" 
+                                    fill="none" 
+                                    stroke="url(#combinedGradient)" 
+                                    stroke-width="4"/>
+                            <path d="M-20,0 L20,0 M0,-20 L0,20" 
+                                  stroke="url(#combinedGradient)" 
+                                  stroke-width="4" 
+                                  stroke-linecap="round"/>
+                        </g>
+                    </g>
+                    
+                    <!-- Decorative elements -->
+                    <circle cx="25" cy="25" r="5" fill="url(#combinedGradient)" opacity="0.5">
+                        <animate attributeName="r" 
+                                 values="5;7;5" 
+                                 dur="2s" 
+                                 repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="75" cy="75" r="5" fill="url(#combinedGradient)" opacity="0.5">
+                        <animate attributeName="r" 
+                                 values="5;7;5" 
+                                 dur="2s" 
+                                 repeatCount="indefinite" 
+                                 begin="1s"/>
+                    </circle>
+                </svg>
+                <h3>Combined Service</h3>
+            </div>
+        </div>
+
+        <div id="cooking-details" class="service-details active">
+            <div class="service-card" id="cooking-card">
+                <div class="service-header" onclick="toggleServiceForm(this.parentElement)">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <!-- Background circle with gradient -->
+                        <defs>
+                            <linearGradient id="cookingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF9966"/>
+                                <stop offset="100%" style="stop-color:#FF5E62"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#cookingGradient)" opacity="0.2"/>
+                        
+                        <!-- Cooking pot design -->
+                        <path d="M25 45 C25 35, 75 35, 75 45 S70 70 50 70 S25 55 25 45" 
+                              fill="url(#cookingGradient)" 
+                              stroke="#FF5E62" 
+                              stroke-width="2"/>
+                        
+                        <!-- Steam effects -->
+                        <path d="M40 30 Q45 25 40 20" stroke="#FF5E62" stroke-width="2" stroke-linecap="round">
+                            <animate attributeName="d" 
+                                     dur="2s" 
+                                     values="M40 30 Q45 25 40 20;M40 30 Q35 25 40 20;M40 30 Q45 25 40 20" 
+                                     repeatCount="indefinite"/>
+                        </path>
+                        <path d="M50 25 Q55 20 50 15" stroke="#FF5E62" stroke-width="2" stroke-linecap="round">
+                            <animate attributeName="d" 
+                                     dur="2s" 
+                                     values="M50 25 Q55 20 50 15;M50 25 Q45 20 50 15;M50 25 Q55 20 50 15" 
+                                     repeatCount="indefinite" 
+                                     begin="0.3s"/>
+                        </path>
+                        <path d="M60 30 Q65 25 60 20" stroke="#FF5E62" stroke-width="2" stroke-linecap="round">
+                            <animate attributeName="d" 
+                                     dur="2s" 
+                                     values="M60 30 Q65 25 60 20;M60 30 Q55 25 60 20;M60 30 Q65 25 60 20" 
+                                     repeatCount="indefinite" 
+                                     begin="0.6s"/>
+                        </path>
+                    </svg>
+                    <h3>Cooking</h3>
+                    <p>Professional cooking services for your daily meals, special occasions, or meal prep.</p>
+                </div>
+                
+                <form class="service-form">
+                    <div class="other-services">
+                        <div class="mini-card" data-service="cleaning">
+                            <img src="https://cdn-icons-png.flaticon.com/512/995/995016.png" alt="Cleaning">
+                            <h4>Cleaning</h4>
+                        </div>
+                        <div class="mini-card" data-service="combined">
+                            <img src="https://cdn-icons-png.flaticon.com/512/995/995040.png" alt="Cooking + Cleaning">
+                            <h4>Cooking + Cleaning</h4>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-step">Food Type</div>
+                        <div class="progress-step">Preferences</div>
+                        <div class="progress-step">Time & Duration</div>
+                        <div class="progress-step">Confirmation</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="food-type">Food Preference:</label>
+                        <select id="food-type" onchange="calculateCharge()">
+                            <option value="veg">Vegetarian</option>
+                            <option value="nonveg">Non-Vegetarian</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maid-gender">Preferred Maid Gender:</label>
+                        <select id="maid-gender">
+                            <option value="any">No Preference</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="members">Number of Members:</label>
+                        <input type="number" id="members" min="1" max="10" value="1" onchange="calculateCharge()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service-type">Service Duration:</label>
+                        <select id="service-type" onchange="calculateCharge()">
+                            <option value="monthly">Monthly Service</option>
+                            <option value="part-time">Part-time Service (Per Day)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time-slot">Time Required:</label>
+                        <select id="time-slot" onchange="updateShiftOptions(); calculateCharge()">
+                            <option value="2">2 Hours/day</option>
+                            <option value="4">4 Hours/day</option>
+                            <option value="6">6 Hours/day</option>
+                            <option value="8">8 Hours/day (Full day)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shift">Preferred Shift:</label>
+                        <select id="shift" onchange="calculateCharge()">
+                            <!-- Shift options will be populated by JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="total-charge">
+                        Total Charge: <span id="cooking-charge">₹3000</span><span id="rate-period">/month</span>
+                    </div>
+
+                    <div class="book-now-container">
+                        <a href="#" class="book-now">Book Now</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="cleaning-details" class="service-details">
+            <div class="service-card" id="cleaning-card">
+                <div class="service-header" onclick="toggleServiceForm(this.parentElement)">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="cleaningGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00E1FF"/>
+                                <stop offset="100%" style="stop-color:#00B4D8"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#cleaningGradient)" opacity="0.2"/>
+                        
+                        <!-- Sparkle design -->
+                        <g transform="translate(50,50)">
+                            <g>
+                                <animate attributeName="transform" 
+                                         attributeType="XML" 
+                                         type="rotate" 
+                                         from="0" 
+                                         to="360" 
+                                         dur="8s" 
+                                         repeatCount="indefinite"/>
+                                <path d="M-25,-25 L25,25 M25,-25 L-25,25" 
+                                      stroke="url(#cleaningGradient)" 
+                                      stroke-width="6" 
+                                      stroke-linecap="round"/>
+                                <circle cx="0" cy="0" r="12" 
+                                        fill="url(#cleaningGradient)"/>
+                            </g>
+                        </g>
+                        
+                        <!-- Small sparkles -->
+                        <circle cx="20" cy="20" r="3" fill="#00B4D8">
+                            <animate attributeName="opacity" 
+                                     values="0;1;0" 
+                                     dur="2s" 
+                                     repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="80" cy="80" r="3" fill="#00B4D8">
+                            <animate attributeName="opacity" 
+                                     values="0;1;0" 
+                                     dur="2s" 
+                                     repeatCount="indefinite" 
+                                     begin="0.5s"/>
+                        </circle>
+                    </svg>
+                    <h3>Cleaning</h3>
+                    <p>Thorough cleaning services for your home, including dusting, mopping, and sanitizing.</p>
+                </div>
+                
+                <form class="service-form">
+                    <div class="other-services">
+                        <div class="mini-card" data-service="cooking">
+                            <img src="https://cdn-icons-png.flaticon.com/512/995/995053.png" alt="Cooking">
+                            <h4>Cooking</h4>
+                        </div>
+                        <div class="mini-card" data-service="combined">
+                            <img src="https://cdn-icons-png.flaticon.com/512/995/995040.png" alt="Cooking + Cleaning">
+                            <h4>Cooking + Cleaning</h4>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-step">House Details</div>
+                        <div class="progress-step">Preferences</div>
+                        <div class="progress-step">Time & Duration</div>
+                        <div class="progress-step">Confirmation</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bhk-size">House Size:</label>
+                        <select id="bhk-size" onchange="calculateCleaningCharge()">
+                            <option value="1">1 BHK</option>
+                            <option value="2">2 BHK</option>
+                            <option value="3">3 BHK</option>
+                            <option value="4">4 BHK</option>
+                            <option value="5">5+ BHK</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaning-maid-gender">Preferred Maid Gender:</label>
+                        <select id="cleaning-maid-gender">
+                            <option value="any">No Preference</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaning-service-type">Service Duration:</label>
+                        <select id="cleaning-service-type" onchange="calculateCleaningCharge()">
+                            <option value="monthly">Monthly Service</option>
+                            <option value="part-time">Part-time Service (Per Day)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaning-time-slot">Time Required:</label>
+                        <select id="cleaning-time-slot" onchange="updateCleaningShiftOptions(); calculateCleaningCharge()">
+                            <option value="2">2 Hours/day</option>
+                            <option value="4">4 Hours/day</option>
+                            <option value="6">6 Hours/day</option>
+                            <option value="8">8 Hours/day (Full day)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleaning-shift">Preferred Shift:</label>
+                        <select id="cleaning-shift" onchange="calculateCleaningCharge()">
+                            <!-- Shift options will be populated by JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="total-charge">
+                        Total Charge: <span id="cleaning-charge">₹2000</span><span id="cleaning-rate-period">/month</span>
+                    </div>
+
+                    <div class="book-now-container">
+                        <a href="#" class="book-now">Book Now</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="combined-details" class="service-details">
+            <div class="service-card" id="combined-card">
+                <div class="service-header" onclick="toggleServiceForm(this.parentElement)">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="combinedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#9C27B0"/>
+                                <stop offset="100%" style="stop-color:#673AB7"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#combinedGradient)" opacity="0.2"/>
+                        
+                        <!-- Combined symbol -->
+                        <g transform="translate(50,50)">
+                            <g>
+                                <animate attributeName="transform" 
+                                         attributeType="XML" 
+                                         type="rotate" 
+                                         from="0" 
+                                         to="360" 
+                                         dur="12s" 
+                                         repeatCount="indefinite"/>
+                                <circle cx="0" cy="0" r="25" 
+                                        fill="none" 
+                                        stroke="url(#combinedGradient)" 
+                                        stroke-width="4"/>
+                                <path d="M-20,0 L20,0 M0,-20 L0,20" 
+                                      stroke="url(#combinedGradient)" 
+                                      stroke-width="4" 
+                                      stroke-linecap="round"/>
+                            </g>
+                        </g>
+                        
+                        <!-- Decorative elements -->
+                        <circle cx="25" cy="25" r="5" fill="url(#combinedGradient)" opacity="0.5">
+                            <animate attributeName="r" 
+                                     values="5;7;5" 
+                                     dur="2s" 
+                                     repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="75" cy="75" r="5" fill="url(#combinedGradient)" opacity="0.5">
+                            <animate attributeName="r" 
+                                     values="5;7;5" 
+                                     dur="2s" 
+                                     repeatCount="indefinite" 
+                                     begin="1s"/>
+                        </circle>
+                    </svg>
+                    <h3>Cooking + Cleaning</h3>
+                    <p>Complete home care package including both cooking and cleaning services.</p>
+                </div>
+                
+                <form class="service-form">
+                    <div class="other-services">
+                        <div class="mini-card" data-service="cooking">
+                            <img src="https://cdn-icons-png.flaticon.com/512/995/995053.png" alt="Cooking">
+                            <h4>Cooking</h4>
+                        </div>
+                        <div class="mini-card" data-service="cleaning">
+                            <img src="https://cdn-icons-png.flaticon.com/512/995/995016.png" alt="Cleaning">
+                            <h4>Cleaning</h4>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-step">House Details</div>
+                        <div class="progress-step">Food Preferences</div>
+                        <div class="progress-step">Time & Duration</div>
+                        <div class="progress-step">Confirmation</div>
+                    </div>
+
+                    <!-- Cooking Options -->
+                    <div class="service-section">
+                        <h4 class="section-title">Cooking Service Details</h4>
+                        <div class="form-group">
+                            <label for="combined-food-type">Food Preference:</label>
+                            <select id="combined-food-type" onchange="calculateCombinedCharge()">
+                                <option value="veg">Vegetarian</option>
+                                <option value="nonveg">Non-Vegetarian</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="combined-members">Number of Members:</label>
+                            <input type="number" id="combined-members" min="1" max="10" value="1" onchange="calculateCombinedCharge()">
+                        </div>
+                    </div>
+
+                    <!-- Cleaning Options -->
+                    <div class="service-section">
+                        <h4 class="section-title">Cleaning Service Details</h4>
+                        <div class="form-group">
+                            <label for="combined-bhk-size">House Size:</label>
+                            <select id="combined-bhk-size" onchange="calculateCombinedCharge()">
+                                <option value="1">1 BHK</option>
+                                <option value="2">2 BHK</option>
+                                <option value="3">3 BHK</option>
+                                <option value="4">4 BHK</option>
+                                <option value="5">5+ BHK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Common Options -->
+                    <div class="service-section">
+                        <h4 class="section-title">Common Preferences</h4>
+                        <div class="form-group">
+                            <label for="combined-maid-gender">Preferred Maid Gender:</label>
+                            <select id="combined-maid-gender">
+                                <option value="any">No Preference</option>
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="combined-service-type">Service Duration:</label>
+                            <select id="combined-service-type" onchange="calculateCombinedCharge()">
+                                <option value="monthly">Monthly Service</option>
+                                <option value="part-time">Part-time Service (Per Day)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="combined-time-slot">Time Required:</label>
+                            <select id="combined-time-slot" onchange="updateCombinedShiftOptions(); calculateCombinedCharge()">
+                                <option value="4">4 Hours/day</option>
+                                <option value="6">6 Hours/day</option>
+                                <option value="8">8 Hours/day (Full day)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="combined-shift">Preferred Shift:</label>
+                            <select id="combined-shift" onchange="calculateCombinedCharge()">
+                                <!-- Shift options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="total-charge">
+                        <div class="charge-breakdown">
+                            Cooking Charge: <span id="combined-cooking-charge">₹3000</span><br>
+                            Cleaning Charge: <span id="combined-cleaning-charge">₹2000</span><br>
+                            Package Discount: <span id="combined-discount">-₹500</span>
+                        </div>
+                        Total Charge: <span id="combined-total-charge">₹4500</span><span id="combined-rate-period">/month</span>
+                    </div>
+
+                    <div class="book-now-container">
+                        <a href="#" class="book-now">Book Now</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="sample3.js">
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+              window.voiceflow.chat.load({
+                verify: { projectID: '679c8a7c89ce96171d913bb4' },
+                url: 'https://general-runtime.voiceflow.com',
+                versionID: 'production'
+              });
+            }
+            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+        })(document, 'script');
+      </script>
+</body>
+</html> 
