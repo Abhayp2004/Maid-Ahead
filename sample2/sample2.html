@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Babysitting Services</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e2e7e7, #1CAD82);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background-color: #d6d6d3;
+            color: #444;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            background: #d6d6d3;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .service-details {
+            flex: 1;
+            background: #d6d6d3;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            color: #444;
+            margin-bottom: 1rem;
+            font-size: 1.2em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #007BFF;
+            outline: none;
+            background: #fff;
+        }
+
+        .price-card {
+            background: #007BFF;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .price-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .total-price {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .book-now {
+            background-color: white;
+            color: #007BFF;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .book-now:hover {
+            background-color: #1CAD82;
+            color: white;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .time-slot:hover {
+            border-color: #007BFF;
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .time-slot.active {
+            background: #007BFF;
+            border-color: #007BFF;
+            color: white;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #007BFF;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .home-button a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            background: #1CAD82;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: #f5f7fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-label:hover {
+            background: #e9ecef;
+        }
+
+        .radio-label.selected {
+            background: #007BFF;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .radio-label input[type="radio"] {
+            display: none;
+        }
+
+        .radio-label span {
+            margin-left: 8px;
+        }
+
+        .number-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f7fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .number-input-container button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .number-input-container input[type="number"] {
+            width: 60px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        #vfchat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .vf-widget {
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Professional Babysitting Services</h1>
+        <p>Trusted care for your little ones</p>
+    </header>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="service-option active">
+                <h3>Babysitting Service</h3>
+                <p>Professional care for your children</p>
+            </div>
+        </div>
+
+        <div class="service-details">
+            <form class="service-form">
+                <div class="form-section">
+                    <h3>Babysitter Preferences</h3>
+                    <div class="form-group">
+                        <label>Preferred Gender:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="sitter-gender" value="any" checked>
+                                <span>No Preference</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="sitter-gender" value="female">
+                                <span>Female</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="sitter-gender" value="male">
+                                <span>Male</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Number of Children:</label>
+                        <div class="number-input-container">
+                            <button type="button" onclick="decrementChildren()">-</button>
+                            <input type="number" id="children" min="1" max="5" value="1" readonly>
+                            <button type="button" onclick="incrementChildren()">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Service Duration</h3>
+                    <div class="form-group">
+                        <label>Service Type:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="service-type" value="part-time" checked>
+                                <span>Part Time</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="service-type" value="full-time">
+                                <span>Full Time (Monthly)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hours">Hours Required:</label>
+                        <select id="hours">
+                            <option value="2">2 Hours</option>
+                            <option value="4">4 Hours</option>
+                            <option value="6">6 Hours</option>
+                            <option value="8">8 Hours</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Time Slot:</label>
+                        <div class="time-slots" id="time-slots">
+                            <!-- Time slots will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-details">
+                        <span>Base Rate</span>
+                        <span id="base-rate">₹2000</span>
+                    </div>
+                    <div class="price-details">
+                        <span>Time Duration Discount</span>
+                        <span id="time-discount">-₹0</span>
+                    </div>
+                    <div class="total-price">
+                        <div id="total-amount">₹2000</div>
+                        <div id="rate-period">/month</div>
+                    </div>
+                    <button class="book-now" type="button" onclick="redirectToBabysitting()">Book Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="home-button">
+        <a href="../services.php">Back to Services</a>
+    </div>
+
+    <div id="vfchat"></div>
+
+    <script src="sample2.js"></script>
+    <script type="text/javascript">
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+              window.voiceflow.chat.load({
+                verify: { projectID: '67fb815a62f6849a97c7c341' },
+                url: 'https://general-runtime.voiceflow.com',
+                versionID: 'production'
+              });
+            }
+            v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+        })(document, 'script');
+      </script>
+</body>
+</html> 

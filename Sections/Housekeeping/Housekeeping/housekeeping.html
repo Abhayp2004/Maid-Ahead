@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeClean - Professional Housekeeping Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-home"></i>
+            HomeClean
+        </div>
+        <div class="nav-items">
+            <a href="housekeeping.html">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+            <button class="hire-btn"><i class="fas fa-handshake"></i> Hire Now</button>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Your Trusted Partner in Home Care</h1>
+            <p>Professional, reliable, and experienced housekeepers at your service</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>1000+</span>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-home"></i>
+                    <span>5000+</span>
+                    <p>Homes Cleaned</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <span>4.8</span>
+                    <p>Average Rating</p>
+                </div>
+            </div>
+            <button id="view-maids-btn" class="cta-btn">View Available Housekeepers</button>
+        </div>
+    </div>
+
+    <div class="features-section" id="features-section">
+        <h2>Why Choose HomeClean?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>Verified Staff</h3>
+                <p>All housekeepers are thoroughly background checked</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Secure & Safe</h3>
+                <p>Your safety and security is our top priority</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>Flexible Timing</h3>
+                <p>Choose timing that works best for you</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-hand-sparkles"></i>
+                <h3>Quality Service</h3>
+                <p>Professional and thorough cleaning service</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="maids-section" class="maids-section" style="display: none;">
+        <div class="header-section">
+            <h2>Our Professional Housekeepers</h2>
+            <div class="online-status">
+                <span class="status-dot"></span>
+                <span>10 Housekeepers Available</span>
+            </div>
+        </div>
+        <div class="maid-grid">
+            <!-- Maid profiles will be loaded via JavaScript -->
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-details"></div>
+        </div>
+    </div>
+
+    <script src="housekeeping.js"></script>
+</body>
+</html> 
