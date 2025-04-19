@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BabyCare Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-baby"></i>
+            BabyCare
+        </div>
+        <div class="nav-items">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+            <button class="hire-btn"><i class="fas fa-handshake"></i> Hire Now</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <h1>Find Your Perfect <span class="highlight">Caregiver</span></h1>
+                <p>Trusted and experienced caregivers. Simple and reliable care services.</p>
+                <div class="welcome-features">
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verified Professionals</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-clock"></i>
+                        <span>24/7 Availability</span>
+                    </div>
+                </div>
+                <button id="view-maids-btn" class="cta-btn">
+                    <i class="fas fa-search"></i>
+                    View Available Caregivers
+                </button>
+            </div>
+            <div class="welcome-image">
+                <img src="Housekeeping.png" alt="Professional Babysitter">
+            </div>
+        </div>
+
+        <div id="maids-section" class="maids-section" style="display: none;">
+            <div class="header-section">
+                <h2>Available Caregivers</h2>
+                <div class="online-status">
+                    <span class="status-dot"></span>
+                    <span>20 Caregivers Available</span>
+                </div>
+            </div>
+
+            <div class="maid-grid">
+                <!-- Profile cards will be dynamically populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-details"></div>
+            <div class="booking-form">
+                <h3>Book Appointment</h3>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label>Your Name:</label>
+                        <input type="text" name="client_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Email:</label>
+                        <input type="email" name="client_email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Date:</label>
+                        <input type="date" name="booking_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Hours:</label>
+                        <input type="number" name="service_hours" min="1" max="12" required>
+                    </div>
+                    <input type="hidden" name="maid_id" id="selected-maid-id">
+                    <button type="submit" class="book-btn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookingData = sessionStorage.getItem('bookingData');
+            if (bookingData) {
+                try {
+                    const data = JSON.parse(bookingData);
+                    generateBill(data);
+                    sessionStorage.removeItem('bookingData');
+                    
+                    const billSection = document.getElementById('bill-section');
+                    if (billSection) {
+                        billSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } catch (error) {
+                    console.error('Error loading booking data:', error);
+                }
+            }
+        });
+    </script>
+    <script>
+    function generateBill(bookingData) {
+        let baseCharge = 0;
+        switch(bookingData.care_duration) {
+            case 'full-time': baseCharge = 15000; break;
+            case 'part-time': baseCharge = 8000; break;
+            case 'hourly': baseCharge = 300; break;
+            default: baseCharge = 8000;
+        }
+
+        const gst = baseCharge * 0.18;
+        const totalCharge = baseCharge + gst;
+
+        let billSection = document.getElementById('bill-section');
+        if (!billSection) {
+            billSection = document.createElement('div');
+            billSection.id = 'bill-section';
+            document.body.appendChild(billSection);
+        }
+
+        billSection.innerHTML = `
+            <div class="bill-container">
+                <div class="bill-header">
+                    <h2>Booking Confirmation</h2>
+                    <div class="booking-info">
+                        <p>Booking ID: <span>${bookingData.booking_id}</span></p>
+                        <p>Date: <span>${bookingData.timestamp}</span></p>
+                    </div>
+                </div>
+
+                <div class="bill-details">
+                    <h3>Customer Details</h3>
+                    <p><strong>Name:</strong> ${bookingData.customer_name}</p>
+                    <p><strong>Email:</strong> ${bookingData.customer_email}</p>
+                    <p><strong>Phone:</strong> ${bookingData.customer_phone}</p>
+                    <p><strong>Address:</strong> ${bookingData.customer_address}</p>
+
+                    <h3>Babysitter Details</h3>
+                    <p><strong>Name:</strong> ${bookingData.babysitter.name}</p>
+                    <p><strong>Experience:</strong> ${bookingData.babysitter.experience}</p>
+                    <p><strong>Specialization:</strong> ${bookingData.babysitter.specialization}</p>
+
+                    <h3>Service Details</h3>
+                    <p><strong>Care Duration:</strong> ${bookingData.care_duration}</p>
+                    <p><strong>Start Date:</strong> ${bookingData.booking_date}</p>
+                    <p><strong>Requirements:</strong> ${bookingData.requirements || 'None'}</p>
+
+                    <div class="charges-section">
+                        <h3>Charges Breakdown</h3>
+                        <p><strong>Base Charge:</strong> ₹${baseCharge.toFixed(2)}</p>
+                        <p><strong>GST (18%):</strong> ₹${gst.toFixed(2)}</p>
+                        <p class="total"><strong>Total Amount:</strong> ₹${totalCharge.toFixed(2)}</p>
+                    </div>
+                </div>
+
+                <div class="bill-footer">
+                    <p>Thank you for choosing our services!</p>
+                    <div class="action-buttons">
+                        <button onclick="window.print()" class="print-btn">
+                            <i class="fas fa-print"></i> Print Bill
+                        </button>
+                        <button onclick="window.location.href='../services.php'" class="home-btn">
+                            <i class="fas fa-home"></i> Back to Home
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        billSection.style.display = 'flex';
+    }
+    </script>
+</body>
+</html> 

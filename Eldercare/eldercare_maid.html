@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elder Care Professionals</title>
+    <link rel="stylesheet" href="eldercare_maid.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-heart"></i>
+            Maid Ahead
+        </div>
+        <div class="nav-items">
+            <a href="../index.php">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <div class="maids-section">
+        <div class="header-section">
+            <h2>Our Professional Caregivers</h2>
+            <div class="horizontal-nav">
+                <ul>
+                    <li><button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-users"></i> All Caregivers
+                    </button></li>
+                    <li><button class="filter-btn" data-filter="medical">
+                        <i class="fas fa-user-md"></i> Medical Care
+                    </button></li>
+                    <li><button class="filter-btn" data-filter="companion">
+                        <i class="fas fa-hands-helping"></i> Companionship
+                    </button></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="maid-profiles-container">
+            
+        </div>
+    </div>
+
+   
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-body">
+                <div id="modal-details" class="caregiver-details"></div>
+                <div class="booking-form">
+                    <h3>Book Caregiver</h3>
+                    <form id="booking-form">
+                        <div class="form-group">
+                            <label>Your Name:</label>
+                            <input type="text" name="customer_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" name="customer_email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone:</label>
+                            <input type="tel" name="customer_phone" required pattern="[0-9]{10}">
+                        </div>
+                        <div class="form-group">
+                            <label>Booking Date:</label>
+                            <input type="date" name="booking_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Care Duration:</label>
+                            <select name="care_duration" required>
+                                <option value="">Select duration</option>
+                                <option value="full-time">Full-time Care</option>
+                                <option value="day">Day Care (8 AM - 8 PM)</option>
+                                <option value="night">Night Care (8 PM - 8 AM)</option>
+                                <option value="hourly">Hourly Care</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Requirements:</label>
+                            <textarea name="requirements" rows="3" placeholder="Any specific care requirements..."></textarea>
+                        </div>
+                        <input type="hidden" name="maid_id" value="">
+                        <button type="submit" class="book-btn">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+   
+    const caregivers = [
+        {
+            id: 1,
+            name: "Priya Sharma",
+            gender: "Female",
+            age: 35,
+            experience: "10 years",
+            rating: 4.9,
+            services: ["Medical Care", "Patient Monitoring"],
+            specialization: "Geriatric Care",
+            availability: "Full-time",
+            type: "medical",
+            salary: "₹25,000/month"
+        },
+        {
+            id: 2,
+            name: "Rajesh Kumar",
+            gender: "Male",
+            age: 40,
+            experience: "15 years",
+            rating: 4.8,
+            services: ["Medical Care", "Physiotherapy"],
+            specialization: "Critical Care",
+            availability: "Full-time",
+            type: "medical"
+        },
+        {
+            id: 3,
+            name: "Anjali Verma",
+            gender: "Female",
+            age: 32,
+            experience: "8 years",
+            rating: 4.7,
+            services: ["Companionship", "Daily Activities"],
+            specialization: "Elder Companionship",
+            availability: "Part-time",
+            type: "companion"
+        },
+        {
+            id: 4,
+            name: "Meena Patel",
+            gender: "Female",
+            age: 38,
+            experience: "12 years",
+            rating: 4.9,
+            services: ["Medical Care", "Companionship"],
+            specialization: "Full Elder Care",
+            availability: "Full-time",
+            type: "both"
+        }
+        
+    ];
+
+    function createStarRating(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 !== 0;
+        let starsHtml = '';
+        
+        for (let i = 0; i < fullStars; i++) {
+            starsHtml += '<i class="fas fa-star"></i>';
+        }
+        if (hasHalfStar) {
+            starsHtml += '<i class="fas fa-star-half-alt"></i>';
+        }
+        const emptyStars = 5 - Math.ceil(rating);
+        for (let i = 0; i < emptyStars; i++) {
+            starsHtml += '<i class="far fa-star"></i>';
+        }
+        
+        return starsHtml;
+    }
+
+    function displayCaregiverProfiles(filter = 'all') {
+        const container = document.querySelector('.maid-profiles-container');
+        
+        const filteredCaregivers = filter === 'all' 
+            ? caregivers 
+            : caregivers.filter(caregiver => caregiver.type === filter);
+        
+        container.innerHTML = filteredCaregivers.map(caregiver => `
+            <div class="maid-profile">
+                <div class="profile-content">
+                    <h2>${caregiver.name}</h2>
+                    <div class="rating">
+                        ${createStarRating(caregiver.rating)}
+                        <span>(${caregiver.rating})</span>
+                    </div>
+                    <div class="profile-details">
+                        <p><i class="fas fa-user-md"></i> ${caregiver.specialization}</p>
+                        <p><i class="fas fa-clock"></i> ${caregiver.experience}</p>
+                        <p><i class="fas fa-check-circle"></i> ${caregiver.services.join(', ')}</p>
+                        <p><i class="fas fa-money-bill"></i> ${caregiver.salary}</p>
+                    </div>
+                    <button onclick="showDetails(${caregiver.id})" class="view-btn">View Details</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function showDetails(caregiverId) {
+        const caregiver = caregivers.find(c => c.id === caregiverId);
+        if (!caregiver) return;
+
+        const modalDetails = document.getElementById('modal-details');
+        modalDetails.innerHTML = `
+            <h2>${caregiver.name}</h2>
+            <div class="rating">
+                ${createStarRating(caregiver.rating)}
+                <span>(${caregiver.rating})</span>
+            </div>
+            <div class="details-grid">
+                <p><i class="fas fa-venus-mars"></i> <strong>Gender:</strong> ${caregiver.gender}</p>
+                <p><i class="fas fa-user"></i> <strong>Age:</strong> ${caregiver.age} years</p>
+                <p><i class="fas fa-briefcase"></i> <strong>Experience:</strong> ${caregiver.experience}</p>
+                <p><i class="fas fa-stethoscope"></i> <strong>Specialization:</strong> ${caregiver.specialization}</p>
+                <p><i class="fas fa-clock"></i> <strong>Availability:</strong> ${caregiver.availability}</p>
+                <p><i class="fas fa-money-bill"></i> <strong>Salary:</strong> ${caregiver.salary}</p>
+            </div>
+            <div class="services-section">
+                <h3>Services Offered</h3>
+                <div class="services-list">
+                    ${caregiver.services.map(service => `
+                        <span class="service-tag"><i class="fas fa-check"></i> ${service}</span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        document.querySelector('input[name="maid_id"]').value = caregiver.id;
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        displayCaregiverProfiles();
+
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                displayCaregiverProfiles(this.dataset.filter);
+            });
+        });
+
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                maid_id: this.maid_id.value,
+                customer_name: this.customer_name.value,
+                customer_email: this.customer_email.value,
+                customer_phone: this.customer_phone.value,
+                booking_date: this.booking_date.value,
+                care_duration: this.care_duration.value,
+                requirements: this.requirements.value
+            };
+
+            fetch('eldercare_maid.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    
+                    sessionStorage.setItem('bookingData', JSON.stringify({
+                        ...formData,
+                        booking_id: data.booking_id,
+                        caregiver: caregivers.find(c => c.id == formData.maid_id)
+                    }));
+                    
+                    
+                    window.location.href = '../Eldercare_new/eldercare_new.html#bill-section';
+                } else {
+                    alert('Booking failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while booking. Please try again.');
+            });
+        });
+    });
+    </script>
+</body>
+</html> 

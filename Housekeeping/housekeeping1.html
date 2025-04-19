@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeClean - Professional Housekeeping Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-home"></i>
+            HomeClean
+        </div>
+        <div class="nav-items">
+            <a href="../housekeeping.html">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+            <button onclick="redirectToHousekeeping()" class="hire-btn"><i class="fas fa-handshake"></i> Hire Now</button>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Your Trusted Partner in Home Care</h1>
+            <p>Professional, reliable, and experienced housekeepers at your service</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>1000+</span>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-home"></i>
+                    <span>5000+</span>
+                    <p>Homes Cleaned</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <span>4.8</span>
+                    <p>Average Rating</p>
+                </div>
+            </div>
+            <button onclick="redirectToHousekeeping()" class="cta-btn">Book Now</button>
+        </div>
+    </div>
+
+    <div class="features-section" id="features-section">
+        <h2>Why Choose HomeClean?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>Verified Staff</h3>
+                <p>All housekeepers are thoroughly background checked</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Secure & Safe</h3>
+                <p>Your safety and security is our top priority</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>Flexible Timing</h3>
+                <p>Choose timing that works best for you</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-hand-sparkles"></i>
+                <h3>Quality Service</h3>
+                <p>Professional and thorough cleaning service</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="maids-section" class="maids-section" style="display: none;">
+        <div class="header-section">
+            <h2>Our Professional Housekeepers</h2>
+            <div class="horizontal-nav">
+                <ul>
+                    <li><button class="filter-btn active" onclick="filterHousekeepers('all')">All Services</button></li>
+                    <li><button class="filter-btn" onclick="filterHousekeepers('Cleaning')">Cleaning Only</button></li>
+                    <li><button class="filter-btn" onclick="filterHousekeepers('Cooking')">Cooking Only</button></li>
+                    <li><button class="filter-btn" onclick="filterHousekeepers('both')">Cleaning & Cooking</button></li>
+                </ul>
+            </div>
+            <div class="online-status">
+                <span class="status-dot"></span>
+                <span>10 Housekeepers Available</span>
+            </div>
+        </div>
+        <div class="maid-profiles-container">
+            <!-- Maid profiles will be loaded here -->
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-details"></div>
+            <div class="booking-form">
+                <h3>Book Service</h3>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label>Select Date:</label>
+                        <input type="date" name="booking_date" required min="">
+                    </div>
+                    <div class="form-group">
+                        <label>Select Time:</label>
+                        <select name="booking_time" required>
+                            <option value="">Choose time slot</option>
+                            <option value="morning">Morning (6 AM - 10 AM)</option>
+                            <option value="afternoon">Afternoon (10 AM - 2 PM)</option>
+                            <option value="evening">Evening (2 PM - 6 PM)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="book-btn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="housekeeping1.js"></script>
+</body>
+</html> 
